@@ -7,8 +7,8 @@ export async function getAllCourses(signal) {
 }
 
 export async function getCourseById(id, signal) {
-  // Backend route is singular GET /api/course/:id (routes/courseRoute.js)
-  const response = await axiosInstance.get(`/course/${id}`, { signal });
+  // Backend route is GET /api/courses/:id
+  const response = await axiosInstance.get(`/courses/${id}`, { signal });
   return extractPayload(response, 'course');
 }
 

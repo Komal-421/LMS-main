@@ -1,4 +1,5 @@
 import { GraduationCap, Lock, Mail, UserCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -131,6 +132,10 @@ export default function Login() {
             Sign In
           </Button>
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-sm text-slate-600">Don’t have an account? </span>
+          <Link to="/register" className="text-indigo-600 hover:underline">Register</Link>
+        </div>
       </div>
     </div>
   );

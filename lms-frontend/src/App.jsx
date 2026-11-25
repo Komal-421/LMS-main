@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import ToastContainer from './components/ToastContainer';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import { ROLES } from './utils/permissions';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -37,6 +38,7 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           <Route
             element={
