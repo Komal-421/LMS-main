@@ -10,22 +10,16 @@ module.exports.getAllStudents = async (req, res) => {
     }
 }
 
-module.exports.getStudentById = async (id, res, req, res_own) => {
+module.exports.getStudentById = async (req, res) => {
     try {
-        if (id) {
-            const student = await Student.findById(id);
-            res.status(200).json(student);
-        }
-        if (!id) {
-            const id = req.params.id;
-            const student = await Student.findById(id);
-            res_own.status(200).json(student);
-        }
+        const { id } = req.params;
+        const student = await Student.findById(id);
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+        return res.status(200).json(student);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-    catch (error) {
-        res.status(500).json({ 'message': error.message });
-    }
-}
+};
 
 module.exports.updateStudent = async (req, res) => {
     try {

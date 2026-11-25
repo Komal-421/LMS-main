@@ -11,23 +11,16 @@ module.exports.getAllFaculty = async (req, res) => {
     }
 }
 
-module.exports.getFacultyById = async (id, res, req, res_inner) => {
+module.exports.getFacultyById = async (req, res) => {
     try {
-        if (id) {
-            const faculty = await Faculty.findById(id);
-            res.status(200).json(faculty);
-        }
-        if (!id) {
-            const id = req.params.id;
-
-            const faculty = await Faculty.findById(id);
-            res_inner.status(200).json(faculty);
-        }
+        const { id } = req.params;
+        const faculty = await Faculty.findById(id);
+        if (!faculty) return res.status(404).json({ message: 'Faculty not found' });
+        return res.status(200).json(faculty);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-    catch (error) {
-        res_inner.status(500).json({ 'message': error.message });
-    }
-}
+};
 
 module.exports.updateFaculty = async (req, res) => {
     try {

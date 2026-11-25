@@ -1,57 +1,55 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+// Generate JWT token
 const generateToken = (id, role) => {
-    const token = jwt.sign(
-        { id, role },
-        process.env.JWT_SECRET
-    );
-    return token;
-}
+    return jwt.sign({ id, role }, process.env.JWT_SECRET);
+};
 
+// Verify password using bcrypt
 const verifyPassword = async (stored, given) => {
     try {
-        const verified = await bcrypt.compare(given, stored);
-        return verified;
-    }
-    catch (error) {
+        return await bcrypt.compare(given, stored);
+    } catch (error) {
         console.log(error.message);
+        return false;
     }
-}
+};
 
+// Authorize role for accessing protected resources
 const authorizeRole = (role) => {
-    if (role == "faculty" || role == 'admin') {
-        return 1;               // 1 means return true
-    }
-    else if (role == 'student') {
-        return 0;
-    }
-}
+    if (role === 'faculty' || role === 'admin') return 1; // true
+    if (role === 'student') return 0; // false
+    return null;
+};
 
+// Create bcrypt hash for passwords
 const createHash = async (password) => {
-    const value = await bcrypt.hash(password, 10);
-    return value;
-}
+    return await bcrypt.hash(password, 10);
+};
 
+// Extract user info from Authorization header (Bearer token)
 const extractInfo = (req) => {
     const headers = req.headers;
-    if (!headers) {
-        return res.status(400).json('Token not found');
+    if (!headers || !headers.authorization) {
+        // No token provided
+        return null;
     }
     try {
         const token = headers.authorization.split(' ')[1];
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        // console.log(verified);
-        const role = verified.role;
-        const id = verified.id;
-        // console.log(id);
+        const { id, role } = verified;
         return { id, role };
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error.message);
+        return null;
     }
-}
+};
 
 module.exports = {
-    generateToken, verifyPassword, authorizeRole, createHash, extractInfo
-}
+    generateToken,
+    verifyPassword,
+    authorizeRole,
+    createHash,
+    extractInfo,
+};

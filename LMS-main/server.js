@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -9,17 +9,17 @@ const courseRoute = require('./routes/courseRoute');
 const facultyRoute = require('./routes/facultyRoute');
 const studentRoute = require('./routes/studentRoute');
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(cookies());
+app.use(express.json());
 app.use('/api', authRoute);
 app.use('/api', courseRoute);
 app.use('/api', facultyRoute);
 app.use('/api', studentRoute);
+// 404 handler after all routes
 app.use((req, res) => {
     return res.status(404).json({ 'message': 'Page does not exist!' });
 });
-
-app.use(cookies());
 
 const dns = require('dns');
 dns.setServers(['1.1.1.1', '8.8.8.8']);
